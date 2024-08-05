@@ -292,12 +292,6 @@
                                     <li class="list-inline-item">
                                         <i class="ti-calendar"></i>{{ date('d-m-Y', strtotime($post->created_at)) }}
                                     </li>
-                                    <li class="list-inline-item">
-                                        <ul class="card-meta-tag list-inline">
-                                            <li class="list-inline-item"><a href="tags.html">Decorate</a></li>
-                                            <li class="list-inline-item"><a href="tags.html">Creative</a></li>
-                                        </ul>
-                                    </li>
                                 </ul>
                                 <p>{{ Str::words($post->excerpt, 50, '...') }}</p>
                                 <a href="{{ route('post.detail', ['id' => $post->id, 'slug' => $post->slug]) }}"

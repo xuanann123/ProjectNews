@@ -17,7 +17,7 @@ class CategoryController extends Controller
     const PATH_VIEW = "admin.categories.";
     function list(Request $request)
     {
-        $list_act = [
+        $listAction = [
             'delete' => "Xoá toàn bộ",
             'active' => "Đăng toàn bộ",
             'pending' => "Chờ duyệt toàn bộ",
@@ -28,42 +28,40 @@ class CategoryController extends Controller
         }
         $status = $request->status;
         if ($status == "trash") {
-            $list_act = [
+            $listAction = [
                 'restore' => "Khôi phục toàn bộ ",
                 'forceDelete' => "Xoá vĩnh viễn toàn bộ",
             ];
-            $data = Category::onlyTrashed()->where('name', 'like', "%$keyword%")->where('parent_id', 0)->latest()->paginate(5);
+            $data = Category::onlyTrashed()->where('name', 'like', "%$keyword%")->latest('id')->paginate(5);
         } elseif ($status == "active") {
-            $list_act = [
+            $listAction = [
                 'delete' => "Xoá toàn bộ",
                 'pending' => "Chờ duyệt toàn bộ",
             ];
-            $data = Category::where("is_active", 1)->where('name', 'like', "%$keyword%")->where('parent_id', 0)->latest()->paginate(5);
+            $data = Category::where("is_active", 1)->where('name', 'like', "%$keyword%")->latest('id')->paginate(5);
         } elseif ($status == "pending") {
-            $list_act = [
+            $listAction = [
                 'delete' => "Xoá toàn bộ",
                 'active' => "Đăng toàn bộ",
             ];
-            $data = Category::where("is_active", 0)->where('name', 'like', "%$keyword%")->where('parent_id', 0)->latest()->paginate(5);
+            $data = Category::where("is_active", 0)->where('name', 'like', "%$keyword%")->latest('id')->paginate(5);
         } else {
-            $data = Category::where('name', 'like', "%$keyword%")->where('parent_id', 0)->latest()->paginate(5);
+            $data = Category::where('name', 'like', "%$keyword%")->latest('id')->paginate(5);
         }
         // dd($data);
         $count = [];
-        $count_all_category = Category::all()->count();
-        $count_active = Category::where("is_active", 1)->count();
-        $count_peding = Category::where("is_active", 0)->count();
-        $count_trash = Category::onlyTrashed()->count();
-        $count = [$count_all_category, $count_active, $count_peding, $count_trash];
-        
-        return view(self::PATH_VIEW . __FUNCTION__, compact('data', 'count', 'list_act'));
+        $countAllCategory = Category::all()->count();
+        $countActive = Category::where("is_active", 1)->count();
+        $countPending = Category::where("is_active", 0)->count();
+        $countTrashed = Category::onlyTrashed()->count();
+        $count = [$countAllCategory, $countActive, $countPending, $countTrashed];
+        return view(self::PATH_VIEW . __FUNCTION__, compact('data', 'count', 'listAction'));
     }
     function create()
     {
         //Thực hiện Eager Loading tránh n+1 query và tối ưu hoá
         $listCategory = Category::with('childrenRecursive')->where('parent_id', '0')->get();
         //toàn bộ những thằng có danh mục cha ra ngoài
-        
         return view(self::PATH_VIEW . __FUNCTION__, compact('listCategory'));
     }
     function store(Request $request)
@@ -81,13 +79,13 @@ class CategoryController extends Controller
                 'name' => "Tên danh mục"
             ]
         );
-        $is_active = $request->is_active ? $request->is_active : 0;
+        $isActive = $request->isActive ? $request->isActive : 0;
         Category::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
             'description' => $request->description,
             'user_id' => Auth::user()->id,
-            'is_active' => $is_active,
+            'is_active' => $isActive,
             'parent_id' => $request->input('parent_id') ?? 0
         ]);
         return redirect()->route("admin.categories.list")->with('success', 'Thêm danh mục bài viết thành công');
@@ -113,13 +111,13 @@ class CategoryController extends Controller
                 'name' => "tên danh mục"
             ]
         );
-        $is_active = $request->is_active ? $request->is_active : 0;
+        $isActive = $request->isActive ? $request->isActive : 0;
         $category->update([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
             'description' => $request->description,
             'user_id' => Auth::user()->id,
-            'is_active' => $is_active,
+            'is_active' => $isActive,
             'parent_id' => $request->input('parent_id') ?? 0
         ]);
         return redirect()->route("admin.categories.list")->with('success', "Sửa danh mục thành công");
@@ -137,31 +135,29 @@ class CategoryController extends Controller
 
     function action(Request $request)
     {
-        $list_check = $request->list_check;
-        if ($list_check) {
-
+        $listCheck = $request->listCheck;
+        if ($listCheck) {
             $act = $request->act;
             if ($act) {
-                //pending, delete, active
                 if ($act == "delete") {
-                    Category::whereIn("id", $list_check)->update(["is_active" => 0]);
-                    Category::destroy($list_check);
+                    Category::whereIn("id", $listCheck)->update(["is_active" => 0]);
+                    Category::destroy($listCheck);
                     return redirect()->route("admin.categories.list")->with('success', 'Xoá thành công toàn bộ bản ghi đã chọn');
                 }
                 if ($act == "active") {
-                    Category::whereIn("id", $list_check)->update(["is_active" => 1]);
+                    Category::whereIn("id", $listCheck)->update(["is_active" => 1]);
                     return redirect()->route("admin.categories.list")->with('success', 'Đăng toàn bộ những bản ghi đã chọn');
                 }
                 if ($act == "pending") {
-                    Category::whereIn("id", $list_check)->update(["is_active" => 0]);
+                    Category::whereIn("id", $listCheck)->update(["is_active" => 0]);
                     return redirect()->route("admin.categories.list")->with('success', 'Chuyển đổi toàn bộ những bài viết về chờ xác nhận');
                 }
                 if ($act == "restore") {
-                    Category::onlyTrashed()->whereIn("id", $list_check)->restore();
+                    Category::onlyTrashed()->whereIn("id", $listCheck)->restore();
                     return redirect()->route("admin.categories.list")->with('success', 'Khôi phục thành công toàn bộ bản ghi');
                 }
                 if ($act == "forceDelete") {
-                    Category::onlyTrashed()->whereIn("id", $list_check)->forceDelete();
+                    Category::onlyTrashed()->whereIn("id", $listCheck)->forceDelete();
                     return redirect()->route("admin.categories.list")->with('success', 'Xoá vĩnh viễn toàn bộ bản ghi khỏi hệ thống');
                 }
             } else {

@@ -102,7 +102,7 @@
                                     <div class="col-sm-auto d-flex  justify-content-end gap-2 h-100">
                                         <select class="form-select" name="act">
                                             <option value="0">Chọn thao tác trên nhiều bản ghi</option>
-                                            @foreach ($list_act as $key => $value)
+                                            @foreach ($listAction as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
                                         </select>
@@ -150,7 +150,7 @@
                                             <th scope="row">
                                                 <div class="form-check">
                                                     <input class="form-check-input checkbox" type="checkbox"
-                                                        name="list_check[]" value="{{ $item->id }}">
+                                                        name="listCheck[]" value="{{ $item->id }}">
                                                 </div>
                                             </th>
                                             <td>{{ $t }}</td>

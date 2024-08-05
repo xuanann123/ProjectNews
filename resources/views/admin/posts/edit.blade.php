@@ -84,7 +84,7 @@
                     </div>
 
                     <div class="card-body">
-                        @foreach ($status_posts as $name => $value)
+                        @foreach ($statusPosts as $name => $value)
                             <div class="mb-3">
                                 <h6>Bài viết có {{ $value }} ?</h6>
                                 <div class="form-check form-switch form-switch-md me-1" dir="ltr">
@@ -117,7 +117,7 @@
                         <h5 class="card-title mb-0">Sửa tags thịnh hành có từ trước</h5>
                     </div>
                     <div class="card-body">
-                        <select class="js-example-basic-multiple form-select" name="list_tag[]" multiple="multiple">
+                        <select class="js-example-basic-multiple form-select" name="listTag[]" multiple="multiple">
                             @foreach ($tags as $tag)
                                 @foreach ($post->tags as $item)
                                     <option value="{{ $tag->id }}" {{ $item->id == $tag->id ? 'selected' : '' }}>

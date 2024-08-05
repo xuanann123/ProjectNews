@@ -39,10 +39,10 @@ class RoleController extends Controller
            
         ]);
         $data = $request->except('permission_id');
-        $list_permission_id = $request->permission_id;
+        $listPermissionID = $request->permission_id;
         //Thêm dữ liệu vào bảng role
         $role = Role::query()->create($data);
-        $role->permissions()->sync($list_permission_id);
+        $role->permissions()->sync($listPermissionID);
         return redirect()->route("admin.roles.index")->with('status', "Thêm vai trò thành công!");
     }
     function edit(Role $role) {
@@ -66,11 +66,11 @@ class RoleController extends Controller
             'description' => "Mô tả vai trò",
         ]);
         $data = $request->except('permission_id');
-        $list_permission_id = $request->permission_id;
+        $listPermissionID = $request->permission_id;
         DB::beginTransaction();
         try {
             $role->update($data);
-            $role->permissions()->sync($list_permission_id);
+            $role->permissions()->sync($listPermissionID);
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();

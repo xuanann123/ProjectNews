@@ -68,10 +68,16 @@
                                  role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                  @if (Auth::user()->image)
                                      <img style="width: 30px!important; height: 30px!important;" src="{{ $url }}"
-                                         alt=""> {{ Auth::user()->name }}
+                                         alt="">
+                                     @if (Auth::user())
+                                         {{ Auth::user()->name }}
+                                     @endif
                                  @else
                                      <img style="width: 30px!important; height: 30px!important;"
-                                         src="{{ url('image/notimage.webp') }}" alt=""> {{ Auth::user()->name }}
+                                         src="{{ url('image/notimage.webp') }}" alt="">
+                                     @if (Auth::user())
+                                         {{ Auth::user()->name }}
+                                     @endif
                                  @endif
 
                              </a>

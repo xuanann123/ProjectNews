@@ -27,7 +27,7 @@ class Controller extends BaseController
     }
     function getNewPost()
     {
-        $post = Post::query()->where("is_active", "1")->latest()->first();
+        $post = Post::query()->where("is_active", "1")->latest('id')->first();
         return $post;
     }
     function formattedDate($d)

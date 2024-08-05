@@ -11,28 +11,31 @@
     </div>
 
     <!-- about me -->
-    <div class="widget widget-about">
-        <h4 class="widget-title">Hi, I am {{ Auth::user()->name }}!</h4>
-        @php
-            $url_user = Storage::url(Auth::user()->image);
-        @endphp
-        <img class="img-fluid" src="{{ $url_user }}" alt="Themefisher">
-        <p>{{ Auth::user()->description }}</p>
-        <ul class="list-inline social-icons mb-3">
+    @if (Auth::user())
+        <div class="widget widget-about">
+            <h4 class="widget-title">Hi, I am {{ Auth::user()->name }}!</h4>
+            @php
+                $url_user = Storage::url(Auth::user()->image);
+            @endphp
+            <img class="img-fluid" src="{{ $url_user }}" alt="Themefisher">
+            <p>{{ Auth::user()->description }}</p>
+            <ul class="list-inline social-icons mb-3">
 
-            <li class="list-inline-item"><a href="#"><i class="ti-facebook"></i></a></li>
+                <li class="list-inline-item"><a href="#"><i class="ti-facebook"></i></a></li>
 
-            <li class="list-inline-item"><a href="#"><i class="ti-twitter-alt"></i></a></li>
+                <li class="list-inline-item"><a href="#"><i class="ti-twitter-alt"></i></a></li>
 
-            <li class="list-inline-item"><a href="#"><i class="ti-linkedin"></i></a></li>
+                <li class="list-inline-item"><a href="#"><i class="ti-linkedin"></i></a></li>
 
-            <li class="list-inline-item"><a href="#"><i class="ti-github"></i></a></li>
+                <li class="list-inline-item"><a href="#"><i class="ti-github"></i></a></li>
 
-            <li class="list-inline-item"><a href="#"><i class="ti-youtube"></i></a></li>
+                <li class="list-inline-item"><a href="#"><i class="ti-youtube"></i></a></li>
 
-        </ul>
-        <a href="about-me.html" class="btn btn-primary mb-2">About me</a>
-    </div>
+            </ul>
+            <a href="about-me.html" class="btn btn-primary mb-2">About me</a>
+        </div>
+    @endif
+
 
     <!-- Promotion -->
     <div class="promotion">

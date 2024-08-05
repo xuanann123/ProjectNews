@@ -12,7 +12,7 @@ use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\HomeController;
-use App\Models\Comment;
+use App\Models\Comment; 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -27,10 +27,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get("/home", [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+// Route::get("/home", [HomeController::class, 'index'])->name('home');
 Route::prefix("post")
     ->as("post.")
     ->group(function () {
@@ -39,7 +37,6 @@ Route::prefix("post")
         Route::post('comments/store/{id}',                          [App\Http\Controllers\Client\PostController::class, 'storeComment'])->name('comments.store');
         Route::get('search',                                        [App\Http\Controllers\Client\PostController::class, 'search'])->name('search');
     });
-
 Route::prefix("page")
     ->as("page.")
     ->group(function () {
@@ -132,7 +129,7 @@ Route::middleware('checkAdmin')->prefix('admin')
             Route::get("/restore/{id}",                             [UserController::class, 'restore'])->name('restore')->can('user.edit');
             Route::get("/forceDelete/{id}",                         [UserController::class, 'forceDelete'])->name('forceDelete')->can('user.edit');
         });
-        //MODULE WITH ROLE => DONE 80%
+        //MODULE WITH ROLE => DONE 
         Route::prefix('roles')
             ->as('roles.')
             ->group(function () {
@@ -185,8 +182,5 @@ Route::middleware('checkAdmin')->prefix('admin')
     });
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -20,16 +20,16 @@ class PostController extends Controller
     const PATH_VIEW = "admin.posts.";
     function index(Request $request)
     {
-        $list_act = [
+        $listAction = [
             'delete' => "Xoá (DELETE)",
             'active' => "Phê duyệt (ACTIVE)",
-            'show_home' => "Hiển thị (SHOW)",
+            'showHome' => "Hiển thị (SHOW)",
             'new' => "Bài viết mới (NEW)",
             'trend' => "Thịnh hành (TREND)",
             'pending' => "Không phê duyệt (NO ACTIVE)",
-            'no_show_home' => "Không Hiển thị (NO SHOW)",
+            'noShowHome' => "Không Hiển thị (NO SHOW)",
             'old' => "Bài viết cũ (OLD)",
-            'no_trend' => "Không thịnh hành (NO TREND)",
+            'noTrend' => "Không thịnh hành (NO TREND)",
         ];
         $status = $request->status;
         $keyword = "";
@@ -37,7 +37,7 @@ class PostController extends Controller
             $keyword = $request->input('keyword');
         }
         if ($status == "trash") {
-            $list_act = [
+            $listAction = [
                 'restore' => "Khôi phục (RESTORE) ",
                 'forceDelete' => "Xoá vĩnh viễn (FORCEDELETE)",
             ];
@@ -45,64 +45,64 @@ class PostController extends Controller
             $data = Post::onlyTrashed()->where('title', 'like', "%$keyword%")->latest()->get();
         } elseif ($status == "active") {
             //done
-            $list_act = [
+            $listAction = [
                 'delete' => "Xoá (DELETE)",
-                'show_home' => "Hiển thị (SHOW)",
+                'showHome' => "Hiển thị (SHOW)",
                 'new' => "Bài viết mới (NEW)",
                 'trend' => "Thịnh hành (TREND)",
                 'pending' => "Không phê duyệt (NO ACTIVE)",
-                'no_show_home' => "Không Hiển thị (NO SHOW)",
+                'noShowHome' => "Không Hiển thị (NO SHOW)",
                 'old' => "Bài viết cũ (OLD)",
-                'no_trend' => "Không thịnh hành (NO TREND)",
+                'noTrend' => "Không thịnh hành (NO TREND)",
             ];
             $data = Post::where("is_active", 1)->where('title', 'like', "%$keyword%")->latest()->get();
         } elseif ($status == "trend") {
             //done
-            $list_act = [
+            $listAction = [
                 'delete' => "Xoá (DELETE)",
                 'active' => "Phê duyệt (ACTIVE)",
-                'show_home' => "Hiển thị (SHOW)",
+                'showHome' => "Hiển thị (SHOW)",
                 'new' => "Bài viết mới (NEW)",
                 'pending' => "Không phê duyệt (NO ACTIVE)",
-                'no_show_home' => "Không Hiển thị (NO SHOW)",
+                'noShowHome' => "Không Hiển thị (NO SHOW)",
                 'old' => "Bài viết cũ (OLD)",
-                'no_trend' => "Không thịnh hành (NO TREND)",
+                'noTrend' => "Không thịnh hành (NO TREND)",
             ];
             $data = Post::where("is_trending", 1)->where('title', 'like', "%$keyword%")->latest()->get();
         } elseif ($status == "new") {
-            $list_act = [
+            $listAction = [
                 'delete' => "Xoá (DELETE)",
                 'active' => "Phê duyệt (ACTIVE)",
-                'show_home' => "Hiển thị (SHOW)",
+                'showHome' => "Hiển thị (SHOW)",
                 'trend' => "Thịnh hành (TREND)",
                 'pending' => "Không phê duyệt (NO ACTIVE)",
-                'no_show_home' => "Không Hiển thị (NO SHOW)",
+                'noShowHome' => "Không Hiển thị (NO SHOW)",
                 'old' => "Bài viết cũ (OLD)",
-                'no_trend' => "Không thịnh hành (NO TREND)",
+                'noTrend' => "Không thịnh hành (NO TREND)",
             ];
             $data = Post::where("is_new", 1)->where('title', 'like', "%$keyword%")->latest()->get();
         } elseif ($status == "showHome") {
-            $list_act = [
+            $listAction = [
                 'delete' => "Xoá (DELETE)",
                 'active' => "Phê duyệt (ACTIVE)",
                 'new' => "Bài viết mới (NEW)",
                 'trend' => "Thịnh hành (TREND)",
                 'pending' => "Không phê duyệt (NO ACTIVE)",
-                'no_show_home' => "Không Hiển thị (NO SHOW)",
+                'noShowHome' => "Không Hiển thị (NO SHOW)",
                 'old' => "Bài viết cũ (OLD)",
-                'no_trend' => "Không thịnh hành (NO TREND)",
+                'noTrend' => "Không thịnh hành (NO TREND)",
             ];
             $data = Post::where("is_show_home", 1)->where('title', 'like', "%$keyword%")->latest()->get();
         } elseif ($status == "pending") {
-            $list_act = [
+            $listAction = [
                 'delete' => "Xoá (DELETE)",
                 'active' => "Phê duyệt (ACTIVE)",
-                'show_home' => "Hiển thị (SHOW)",
+                'showHome' => "Hiển thị (SHOW)",
                 'new' => "Bài viết mới (NEW)",
                 'trend' => "Thịnh hành (TREND)",
-                'no_show_home' => "Không Hiển thị (NO SHOW)",
+                'noShowHome' => "Không Hiển thị (NO SHOW)",
                 'old' => "Bài viết cũ (OLD)",
-                'no_trend' => "Không thịnh hành (NO TREND)",
+                'noTrend' => "Không thịnh hành (NO TREND)",
             ];
             $data = Post::where("is_active", 0)->where('title', 'like', "%$keyword%")->latest()->get();
 
@@ -110,28 +110,26 @@ class PostController extends Controller
             $data = Post::query()->where('title', 'like', "%$keyword%")->latest()->get();
         }
         $count = [];
-        $count_all = Post::all()->count();
-        $count_active = Post::where("is_active", 1)->count();
-        $count_show_home = Post::where("is_show_home", 1)->count();
-        $count_is_new = Post::where("is_new", 1)->count();
-        $count_is_trending = Post::where("is_trending", 1)->count();
-        $count_pending = Post::where("is_active", 0)->count();
-        $count_trash = Post::onlyTrashed()->count();
-        $count = [$count_all, $count_active, $count_show_home, $count_is_new, $count_is_trending, $count_pending, $count_trash];
-        // dd($countComment);
-
+        $countAll = Post::all()->count();
+        $countActive = Post::where("is_active", 1)->count();
+        $countShowHome = Post::where("is_show_home", 1)->count();
+        $countIsNew = Post::where("is_new", 1)->count();
+        $countIsTrending = Post::where("is_trending", 1)->count();
+        $countPending = Post::where("is_active", 0)->count();
+        $countTrash = Post::onlyTrashed()->count();
+        $count = [$countAll, $countActive, $countShowHome, $countIsNew, $countIsTrending, $countPending, $countTrash];
         return view(
             self::PATH_VIEW . __FUNCTION__,
             compact(
                 'data',
-                'list_act',
+                'listAction',
                 'count',
             )
         );
     }
     function create()
     {
-        $status_posts = [
+        $statusPost = [
             'is_active' => 'hoạt động',
             'is_new' => 'mới',
             'is_show_home' => 'ở trang chủ',
@@ -146,7 +144,7 @@ class PostController extends Controller
             compact(
                 'listCategory',
                 'tags',
-                'status_posts',
+                'statusPost',
             )
         );
     }
@@ -170,16 +168,16 @@ class PostController extends Controller
             ]
         );
         //NEW TAG sẽ lấy luôn giá trị của nó
-        $list_tag_new = $request->input('new_tags')[0];
-        if ($list_tag_new !== null) {
-            $list_tag_new_array = explode(',', $list_tag_new);
+        $listTagNew = $request['newTags'][0];
+        if ($listTagNew !== null) {
+            $listTagNewArray = explode(',', $listTagNew);
         }
-        $list_tag_new_array_id = [];
+        $listTagNewArrayId = [];
         //TAG POPULER
-        $list_tag = $request->input("list_tag");
+        $listTag = $request->listTag;
         $data = $request->except('image');
         $data['slug'] = Str::slug($request->input('title'));
-        $data['is_active'] = $request['is_active'] ??= 0;
+        $data['is_active'] = 1;
         $data['is_new'] = $request['is_new'] ??= 0;
         $data['is_show_home'] = $request['is_show_home'] ??= 0;
         $data['is_trending'] = $request['is_trending'] ??= 0;
@@ -192,21 +190,21 @@ class PostController extends Controller
         //Có thể đi dùng DB::commit
         DB::beginTransaction();
         try {
-            //Thêm dữ liệu list_tag_new_array và tags
-            if ($list_tag_new !== null) {
-                foreach ($list_tag_new_array as $name_tag) {
-                    $list_tag_new_array_id[] = Tag::create([
-                        'name' => $name_tag
+            //Thêm dữ liệu listTagNewArray và tags
+            if ($listTagNew !== null) {
+                foreach ($listTagNewArray as $nameTag) {
+                    $listTagNewArrayId[] = Tag::create([
+                        'name' => $nameTag
                     ])->id;
                 }
-                //Ok sau đó nó sẽ thêm toàn bộ value vào list_tag
-                foreach ($list_tag_new_array_id as $key => $value) {
-                    $list_tag[] = $value;
+                //Ok sau đó nó sẽ thêm toàn bộ value vào listTag
+                foreach ($listTagNewArrayId as $key => $value) {
+                    $listTag[] = $value;
                 }
             }
             //Thêm dữ liệu vào post
             $post = Post::create($data);
-            $post->tags()->sync($list_tag);
+            $post->tags()->sync($listTag);
             //Khi thêm xong thì DB::commit() đi
             DB::commit();
             return redirect()->route("admin.posts.index")->with('success', "Thêm bài bài viết thành công");
@@ -221,7 +219,7 @@ class PostController extends Controller
     }
     function edit(Post $post)
     {
-        $status_posts = [
+        $statusPosts = [
             'is_active' => 'hoạt động',
             'is_new' => 'mới',
             'is_show_home' => 'ở trang chủ',
@@ -229,7 +227,7 @@ class PostController extends Controller
         ];
         $listCategory = Category::with('childrenRecursive')->where('parent_id', '0')->get();
         $tags = Tag::query()->latest()->get();
-        return view(self::PATH_VIEW . __FUNCTION__, compact('listCategory', 'tags', 'status_posts', 'post'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('listCategory', 'tags', 'statusPosts', 'post'));
     }
 
     function update(Post $post, Request $request)
@@ -252,7 +250,7 @@ class PostController extends Controller
                 'category_id' => 'Danh mục'
             ]
         );
-        $list_tag = $request->input("list_tag");
+        $listTag = $request->input("listTag");
         $data = $request->except('image');
         $data['slug'] = Str::slug($request->input('title'));
         $data['is_active'] = $request['is_active'] ??= 0;
@@ -269,13 +267,13 @@ class PostController extends Controller
         //Có thể đi dùng DB::commit
         DB::beginTransaction();
         try {
-            $current_image_post = $post->image;
+            $CurrentImagePost = $post->image;
             //Đi sửa dữ liệu bảng post nếu sửa xong
             $post->update($data);
-            $post->tags()->sync($list_tag);
-            if ($current_image_post) {
-                if (Storage::exists($current_image_post) && $current_image_post && $request->hasFile('image')) {
-                    Storage::delete($current_image_post);
+            $post->tags()->sync($listTag);
+            if ($CurrentImagePost) {
+                if (Storage::exists($CurrentImagePost) && $CurrentImagePost && $request->hasFile('image')) {
+                    Storage::delete($CurrentImagePost);
                 }
             }
             DB::commit();
@@ -304,61 +302,61 @@ class PostController extends Controller
 
     function action(Request $request)
     {
-        $list_check = $request->input('list_check');
-        if ($list_check) {
+        $listCheck = $request->listCheck;
+        if ($listCheck) {
             $act = $request->input('act');
             if ($act) {
                 if ($act == "delete") {
-                    Post::whereIn("id", $list_check)->update([
+                    Post::whereIn("id", $listCheck)->update([
                         "is_active" => 0,
                         "is_show_home" => 0,
                         "is_trending" => 0,
                         "is_new" => 0,
                     ]);
-                    Post::destroy($list_check);
+                    Post::destroy($listCheck);
                     return redirect()->route("admin.posts.index")->with('success', "Xoá (DELETE) thành công");
                 }
                 if ($act == "active") {
-                    Post::query()->whereIn("id", $list_check)->update(["is_active" => 1]);
+                    Post::query()->whereIn("id", $listCheck)->update(["is_active" => 1]);
                     return redirect()->route("admin.posts.index")->with('success', "Kích hoạt trạng thái hoạt động của toàn bộ bản ghi");
                 }
-                if ($act == "show_home") {
-                    Post::query()->whereIn("id", $list_check)->update(["is_show_home" => 1]);
+                if ($act == "showHome") {
+                    Post::query()->whereIn("id", $listCheck)->update(["is_show_home" => 1]);
                     return redirect()->route("admin.posts.index")->with('success', "Kích hoạt trạng thái hiển thị trên trang chủ của toàn bộ bản ghi");
                 }
                 if ($act == "new") {
-                    Post::query()->whereIn("id", $list_check)->update(["is_new" => 1]);
+                    Post::query()->whereIn("id", $listCheck)->update(["is_new" => 1]);
                     return redirect()->route("admin.posts.index")->with('success', "Kích hoạt trạng thái mới của toàn bộ bản ghi");
                 }
                 if ($act == "trend") {
-                    Post::query()->whereIn("id", $list_check)->update(["is_trending" => 1]);
+                    Post::query()->whereIn("id", $listCheck)->update(["is_trending" => 1]);
                     return redirect()->route("admin.posts.index")->with('success', "Kích hoạt trạng thái xu hướng của toàn bộ bản ghi");
                 }
                 if ($act == "pending") {
-                    Post::query()->whereIn("id", $list_check)->update(["is_active" => 0]);
+                    Post::query()->whereIn("id", $listCheck)->update(["is_active" => 0]);
                     return redirect()->route("admin.posts.index")->with('success', "Tắt trạng thái hoạt động của toàn bộ bản ghi");
                 }
-                if ($act == "no_show_home") {
-                    Post::query()->whereIn("id", $list_check)->update(["is_show_home" => 0]);
+                if ($act == "noShowHome") {
+                    Post::query()->whereIn("id", $listCheck)->update(["is_show_home" => 0]);
                     return redirect()->route("admin.posts.index")->with('success', "Tắt trạng thái hiển thị của toàn bộ bản ghi");
                 }
                 if ($act == "old") {
-                    Post::query()->whereIn("id", $list_check)->update(["is_new" => 0]);
+                    Post::query()->whereIn("id", $listCheck)->update(["is_new" => 0]);
                     return redirect()->route("admin.posts.index")->with('success', "Chuỷen sang trạng thái cũ của toàn bộ bản ghi");
                 }
-                if ($act == "no_trend") {
-                    Post::query()->whereIn("id", $list_check)->update(["is_trending" => 0]);
+                if ($act == "noTrend") {
+                    Post::query()->whereIn("id", $listCheck)->update(["is_trending" => 0]);
                     return redirect()->route("admin.posts.index")->with('success', "Tắt trạng thái thịnh hành của toàn bộ bản ghi");
                 }
                 if ($act == "restore") {
-                    Post::query()->whereIn("id", $list_check)->restore();
+                    Post::query()->whereIn("id", $listCheck)->restore();
                     return redirect()->route("admin.posts.index")->with('success', "Khôi phục (RESTORE) bản ghi thành công");
                 }
                 if ($act == "forceDelete") {
 
                     DB::beginTransaction();
                     try {
-                        foreach ($list_check as $id) {
+                        foreach ($listCheck as $id) {
                             $post = Post::withTrashed()->findOrFail($id);
                             //Xoá dữ liệu bảng trung
                             $post->tags()->detach();
@@ -421,6 +419,7 @@ class PostController extends Controller
             if ($post->image) {
                 Storage::put("posts", $post->image);
             }
+            
             throw new Exception($e->getMessage());
         }
     }

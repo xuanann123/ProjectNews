@@ -88,7 +88,7 @@
                                     <div class="col-sm-auto d-flex  justify-content-end gap-2 h-100">
                                         <select class="form-select" name="act">
                                             <option value="0">Chọn thao tác trên nhiều bản ghi</option>
-                                            @foreach ($list_act as $key => $value)
+                                            @foreach ($listAction as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
                                         </select>
@@ -117,10 +117,73 @@
                                     <tbody class="list form-check-all">
                                         @if ($data->count() > 0)
                                             @foreach ($data as $item)
-                                                @php
-                                                    $level = ''
-                                                @endphp
-                                                @include('admin.layouts.sublist', ['item' => $item])
+                                                <tr>
+                                                    <th scope="row">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input checkbox" type="checkbox"
+                                                                name="listCheck[]" value="{{ $item->id }}">
+                                                        </div>
+                                                    </th>
+
+                                                    <td class="customer_name"><a
+                                                            href="{{ route('admin.categories.edit', $item->id) }}">{{ $item->name }}</a>
+                                                    </td>
+                                                    <td class="email">{{ $item->description }}</td>
+
+                                                    <td class="phone">
+                                                        {!! $item->is_active
+                                                            ? '<span class="badge bg-danger text-uppercase">Hoạt động</span>'
+                                                            : '<span class="badge bg-info">Chờ duyệt</span>' !!}
+                                                    </td>
+                                                    <td class="date">{{ $item->updated_at }}</td>
+                                                    <td class="status">{{ $item->created_at }} </td>
+                                                    <td>
+                                                        @if (request()->status !== 'trash')
+                                                            <div class="d-flex gap-2">
+                                                                @can('category.edit')
+                                                                    <div class="edit">
+                                                                        <a
+                                                                            href="{{ route('admin.categories.edit', $item->id) }}">
+                                                                            <span
+                                                                                class="btn btn-sm btn-success edit-item-btn">Sửa
+                                                                            </span>
+                                                                        </a>
+                                                                    </div>
+                                                                @endcan
+                                                                @can('category.delete')
+                                                                    <div class="remove">
+                                                                        <a href="{{ route('admin.categories.destroy', $item->id) }}"
+                                                                            onclick="return confirm('Bạn có muốn xoá danh mục {{ $item->name }} không?')"
+                                                                            class="btn btn-sm btn-danger remove-item-btn">
+                                                                            Xoá</a>
+                                                                    </div>
+                                                                @endcan
+
+                                                            </div>
+                                                        @else
+                                                            <div class="d-flex gap-2">
+
+                                                                @can('category.delete')
+                                                                    <div class="remove">
+                                                                        <a onclick="return confirm('Bạn có muốn khôi phục {{ $item->name }} không?')"
+                                                                            href="{{ route('admin.categories.restore', $item->id) }}"
+                                                                            class="btn btn-sm btn-primary remove-item-btn">Khôi
+                                                                            phục</a>
+                                                                    </div>
+                                                                @endcan
+                                                                @can('category.delete')
+                                                                    <div class="remove">
+                                                                        <a onclick="return confirm('Bạn có muốn xoá vĩnh viễn {{ $item->name }} không?')"
+                                                                            href="{{ route('admin.categories.forceDelete', $item->id) }}"
+                                                                            class="btn btn-sm btn-danger remove-item-btn">Xoá
+                                                                            vĩnh
+                                                                            viễn</a>
+                                                                    </div>
+                                                                @endcan
+                                                            </div>
+                                                        @endif
+                                                    </td>
+                                                </tr>
                                             @endforeach
                                         @else
                                             <tr>
@@ -160,20 +223,16 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="d-flex justify-content-end">
-                                <div class="pagination-wrap hstack gap-2">
-                                    <a class="page-item pagination-prev disabled" href="javascript:void(0);">
-                                        Previous
-                                    </a>
-                                    <ul class="pagination listjs-pagination mb-0"></ul>
-                                    <a class="page-item pagination-next" href="javascript:void(0);">
-                                        Next
-                                    </a>
-                                </div>
-                            </div>
-
+<div class="d-none">
+    {{ $data->links() }}
+</div>
+                         
                         </form>
+                           <div class="d-flex justify-content-end">
+                            <div>
+                                {{ $data->links() }}
+                            </div>
+                            </div>
                     </div>
                 </div><!-- end card -->
             </div>

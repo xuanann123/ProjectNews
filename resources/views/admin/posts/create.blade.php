@@ -69,9 +69,8 @@
                     <div class="card-header">
                         <h5 class="card-title mb-0">Các trạng thái bài viết</h5>
                     </div>
-
                     <div class="card-body">
-                        @foreach ($status_posts as $name => $value)
+                        @foreach ($statusPost as $name => $value)
                             <div class="mb-3">
                                 <h6>Bài viết có {{ $value }} ?</h6>
                                 <div class="form-check form-switch form-switch-md me-1" dir="ltr">
@@ -81,7 +80,6 @@
                                 </div>
                             </div>
                         @endforeach
-
                     </div>
                     <!-- end card body -->
                 </div>
@@ -92,7 +90,7 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label class="form-label">Từ khóa</label>
-                            <input type="text" class="form-control" name="new_tags[]" data-role="tagsinput">
+                            <input type="text" class="form-control" name="newTags[]" data-role="tagsinput">
                         </div>
                     </div>
                 </div>
@@ -102,7 +100,7 @@
                         <h5 class="card-title mb-0">Thêm tags thịnh hành có từ trước</h5>
                     </div>
                     <div class="card-body">
-                        <select class="js-example-basic-multiple form-select" name="list_tag[]" multiple="multiple">
+                        <select class="js-example-basic-multiple form-select" name="listTag[]" multiple="multiple">
                             @foreach ($tags as $tag)
                                 <option value="{{ $tag->id }}">{{ $tag->name }}</option>
                             @endforeach

@@ -19,6 +19,8 @@ class ProfileController extends Controller
         //Kiểm tra xem nó có đi upload ảnh không
         if($request->hasFile('image')) {
           $image_new =  Storage::put('profile', $request->file('image'));
+        } else {
+            $image_new = Auth::user()->image;
         }
         $current_image_user = $user->image;
 

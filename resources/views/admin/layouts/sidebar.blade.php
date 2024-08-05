@@ -1,23 +1,25 @@
 <!-- ========== App Menu ========== -->
-<div class="app-menu navbar-menu" style="background: #000000!important">
+
+
+<div class="app-menu navbar-menu" style="background: #f9f9f9!important; border-right: brown">
     <!-- LOGO -->
     <div class="navbar-brand-box">
-        <!-- Dark Logo-->
+
         <a href="{{ route('admin.dashboard') }}" class="logo logo-dark">
             <span class="logo-sm">
-                <img src="{{ asset('assets/images/logo-sm.png') }}" alt="" height="22">
+                <img src="{{ url('image/logo.png') }}" alt="" width="100%" height="auto">
             </span>
             <span class="logo-lg">
-                <img src="{{ asset('assets/images/logo-dark.png') }}" alt="" height="17">
+                <img src="{{ url('image/logo.png') }}" alt="" height="auto">
             </span>
         </a>
         <!-- Light Logo-->
         <a href="{{ route('admin.dashboard') }}" class="logo logo-light">
             <span class="logo-sm">
-                <img src="{{ asset('assets/images/logo-sm.png') }}" alt="" height="22">
+                <img src="{{ url('image/logo.png') }}" alt="" height="auto">
             </span>
             <span class="logo-lg">
-                <img src="{{ asset('assets/images/logo-light.png') }}" alt="" height="17">
+                <img src="{{ url('image/logo.png') }}" alt="" height="auto">
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
@@ -39,25 +41,30 @@
                         aria-controls="sidebarDashboards">
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboards</span>
                     </a>
-                    <a class="nav-link menu-link" href="#sidebarComment" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarComment">
-                        <i class="ri-account-circle-line"></i> <span data-key="t-authentication">Quản lý comment</span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="sidebarComment">
-                        <ul class="nav nav-sm flex-column">
-                            @can('slide.show')
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.comments.index') }}" class="nav-link" data-key="t-signin"> Danh
-                                        sách
-                                    </a>
-                                </li>
-                            @endcan
-                        </ul>
-                    </div>
+
+                    @canany(['comment.delete', 'comment.show'])
+                        <a class="nav-link menu-link" href="#sidebarComment" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false" aria-controls="sidebarComment">
+                            <i class="ri-account-circle-line"></i> <span data-key="t-authentication">Quản lý comment</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="sidebarComment">
+                            <ul class="nav nav-sm flex-column">
+                                @can('comment.show')
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.comments.index') }}" class="nav-link" data-key="t-signin"> Danh
+                                            sách
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </div>
+                    @endcanany
+
                 </li>
+                
+                @canany(['slide.edit', 'slide.add', 'slide.show', 'slide.delete'])
                 <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Quản lý giao diện</span>
                 </li>
-                @canany(['slide.edit', 'slide.add', 'slide.show', 'slide.delete'])
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarFontend" data-bs-toggle="collapse" role="button"
                             aria-expanded="false" aria-controls="sidebarFontend">
@@ -112,6 +119,7 @@
                 @endcanany
                 <li class="menu-title"><span data-key="t-menu">Quản lý nội dung</span></li>
                 @canany(['category.add', 'category.edit', 'category.delete', 'category.show'])
+                
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarCategory" data-bs-toggle="collapse" role="button"
                             aria-expanded="false" aria-controls="sidebarCategory">
@@ -202,7 +210,8 @@
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
                             aria-expanded="false" aria-controls="sidebarAuth">
-                            <i class="ri-account-circle-line"></i> <span data-key="t-authentic ation">Quản lý thành viên</span>
+                            <i class="ri-account-circle-line"></i> <span data-key="t-authentic ation">Quản lý thành
+                                viên</span>
                         </a>
                         <div class="collapse menu-dropdown" id="sidebarAuth">
                             <ul class="nav nav-sm flex-column">
@@ -264,4 +273,25 @@
     </div>
 
     <div class="sidebar-background"></div>
+    <style>
+        .navbar-menu .navbar-nav .nav-link {
+            color: black;
+        }
+
+        .navbar-menu .navbar-nav .nav-link:hover {
+            color: rgb(80, 47, 225);
+        }
+
+        .navbar-menu .navbar-nav .nav-link[data-bs-toggle=collapse][aria-expanded=true] {
+            color: black;
+        }
+
+        .navbar-menu .navbar-nav .nav-sm .nav-link {
+            color: darkblue;
+        }
+
+        .navbar-menu .navbar-nav .nav-sm .nav-link:hover {
+            color: rgb(80, 47, 225);
+        }
+    </style>
 </div>

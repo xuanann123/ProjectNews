@@ -61,7 +61,7 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <div class="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                <input type="checkbox" name="is_active" checked value="1" class="form-check-input">
+                                <input type="checkbox" name="isActive" checked value="1" class="form-check-input">
                                 <label class="form-check-label" for="customSwitchsizemd">Is Active</label>
                             </div>
                         </div>
